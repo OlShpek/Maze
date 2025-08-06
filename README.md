@@ -8,3 +8,6 @@
 * Your target is to reach green square
 * Good luck!
 
+Screenshot from the game can be seen below:
+
+![screenshot]()
