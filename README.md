@@ -10,4 +10,4 @@
 
 Screenshot from the game can be seen below:
 
-![screenshot]()
+![screenshot](https://github.com/OlShpek/Maze/blob/master/img/example.png)
