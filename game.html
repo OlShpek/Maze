@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<style type="text/css">
+		body
+		{
+			background-color: grey;
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+		}
+
+		#game
+		{
+			flex-grow: 2;
+			display: flex;
+			justify-content: center;
+		}
+		#code_area
+		{
+			align-items: center;
+		}
+		.text_a
+		{
+			text-align: center;
+		}
+		td
+		{
+			width: 30px;
+			height: 30px;
+		}
+	</style>
+</head>
+<body>
+	<div class="text_a">
+		<h2>Timer</h2>
+		<p id="time"></p>
+		<button id="state_b" onclick="change_state()">Pause</button>
+	</div>
+	<div id="game"><table id="code_area"></table></div>
+	<div class="text_a">
+		<h2>Score</h2>
+		<p id="score">0/5</p>
+	</div>
+</body>
+<script src="architecture.js"></script>
+<script src="data.js"></script>
+<script type="text/javascript">
+	//for THIS game only x coordinate faces downwards whereas y coordinate faces to the left
+
+	let sys = new System(mg, lvls.length);
+	let game = new Game(lvls[sys.get_curr_level()], tim[sys.get_curr_level()]);
+	
+	//creates the enemy from the raw data
+		function create_enem(enem)
+		{
+			return new Enemy(enem[0], enem[1], enem[2], enem[3], enem[4], enem[5], setInterval(function(){game.enemy_move(enem[5]);}, enem[6]));
+		}
+		// the array of all enemies
+		let enemies_for_levels = [];
+		for (let i = 0; i < efl.length; i++)
+		{
+			enemies_for_levels[i] = [];
+			for (let j = 0; j < efl[i].length; j++)
+			{
+				enemies_for_levels[i][j] = create_enem(efl[i][j]);
+				console.log(create_enem(efl[i][j]));
+			}
+		}
+	//event on the pressing arrows
+	let event_func = function(e)
+	{
+		if (e.keyCode == 37) // left arrow
+		{
+			game.check_move(0, -1);
+		}
+		else if (e.keyCode == 38) // up arrow
+		{
+			game.check_move(-1, 0);
+		}
+		else if (e.keyCode == 39) // right arrow
+		{
+			game.check_move(0, 1);
+		}
+		else if (e.keyCode == 40) // down arrow
+		{
+			game.check_move(1, 0);
+		}
+	};
+	game.set_system(sys);
+	game.set_enemies(enemies_for_levels[sys.get_curr_level()]);
+	document.onkeydown = event_func;
+
+	//activating pause button
+	function change_state()
+	{
+		game.change_game_state();
+	}
+
+	// setting timer
+	let game_timer = setInterval(function(){game.update_timer();}, 1000);
+	game.set_interval(game_timer);
+
+</script>
+</html>
